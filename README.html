@@ -1,0 +1,56 @@
+<h1>Compute Nucleotide Ordering</h1>
+
+<p>This is a tool to compute the ordering or nucleotides in a PDB file.</p>
+
+<h2>Usage</h2>
+
+<p>Put PDB files in <code>tmp/</code> and run <code>make</code>. This will produce a <code>out/resolved.json</code>
+which will contain all data processed by <code>bin/resolved.py</code>. </p>
+
+<p>Note that many structures are discontinuous, which will cause BioPython to spit
+out lots of warnings.</p>
+
+<h2>Files</h2>
+
+<ul>
+<li><p><code>in/known.json</code></p>
+
+<p>This is a json file of all known residue types. This is used to filter
+results from reading a PDB to only extract known residues. Many chains have a
+lot of water and ions or ligands in them. We wish to skip these so anything not
+found in this file is skipped. Currently it only contains RNA nucleotides and
+modified nucleotides.</p>
+
+<p>The format is a simple modified-type -> standard-type object. This mapping
+is used to determine the sequence of each chain. For example <code>2MA</code> which is a
+modified <code>A</code> will be represented as an <code>A</code> in the sequence. While the nucleotide
+ids will use the correct <code>2MA</code> unit.</p></li>
+</ul>
+
+<h2>Scripts</h2>
+
+<h3><code>bin/resolved.py</code></h3>
+
+<h4><code>bin/resolved.py in/known.json PDB_1 PDB_2 ...</code></h4>
+
+<p>This is a script to parse one or more PDB files and determine the ordering of
+nucleotides, the resolved sequence and the nucleotide ids. This will produce one
+JSON object written to standard out of the form:</p>
+
+<pre><code>    {"pdb_id": {"ordering": [nt1, nt2, ...]
+                chain_id: {"sequence": sequence_string, "residues": [nt1, nt2] }
+               }
+     ...
+     }
+</code></pre>
+
+<p>This assumes that each file is named pdb_id.pdb. The ordering entry is the
+global ordering of all nucleotides in the file, while the residue entries for
+each object are the residues in order for that chain.</p>
+
+<p>Currently this does not determine asymmetric unit/biological assembly correctly,
+it always assumes asymmetric unit.</p>
+
+<h1>Author</h1>
+
+<p>Blake Sweeney <a href="&#x6D;&#x61;&#x69;&#x6C;&#116;&#x6F;:&#x62;&#115;&#119;&#101;&#101;&#x6E;&#101;&#64;b&#x67;&#115;&#117;.&#101;&#100;&#x75;">&#x62;&#115;&#119;&#101;&#101;&#x6E;&#101;&#64;b&#x67;&#115;&#117;.&#101;&#100;&#x75;</a></p>
