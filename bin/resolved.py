@@ -49,10 +49,10 @@ if __name__ == '__main__':
     known = load_known(sys.argv[1])
     for pdb_file in sys.argv[2:]:
         name = os.path.basename(pdb_file)
-        name = os.path.splitext(name)[0]
+        parts = os.path.splitext(name)
+        name = parts[0]
         pdb_type = 'AU'
-        # if pdb_file[4] != '.':
-        #     pdb_type = 'BA' + pdb_file[4]
-        data = {}
-        data.update({name: main(pdb_file, name, pdb_type, known)})
+        if parts[1] != '.pdb':
+            pdb_type = 'BA' + parts[1][4]
+        data = {name: main(pdb_file, name, pdb_type, known)}
         print(json.dumps(data))
